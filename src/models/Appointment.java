@@ -2,11 +2,10 @@ package models;
 
 import services.PatientService;
 import services.UserService;
-import utils.Constants;
 import utils.DateUtils;
+import utils.StringUtils;
 
 import java.util.Date;
-import java.util.regex.Pattern;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
@@ -33,17 +32,18 @@ public class Appointment extends SerializableModel {
 
     @Override
     public String toFileString() {
-        return id + Constants.FILE_SEPARATOR +
-                DateUtils.formatDate(date) + Constants.FILE_SEPARATOR +
-                hour + Constants.FILE_SEPARATOR +
-                (patient != null ? patient.id : "0") + Constants.FILE_SEPARATOR +
-                (doctor != null ? doctor.id : "0") + Constants.FILE_SEPARATOR +
-                notes + Constants.FILE_SEPARATOR +
-                completed;
+        return StringUtils.listToFileString(
+                String.valueOf(id),
+                DateUtils.formatDate(date),
+                String.valueOf(hour),
+                patient != null ? String.valueOf(patient.id) : "0",
+                doctor != null ? String.valueOf(doctor.id) : "0",
+                notes,
+                String.valueOf(completed));
     }
 
     public static Appointment fromFileString(String str) {
-        String[] parts = str.split(Pattern.quote(Constants.FILE_SEPARATOR));
+        String[] parts = StringUtils.fileStringToList(str);
         if (parts.length >= 7) {
             Appointment appointment = new Appointment();
             appointment.id = Long.parseLong(parts[0]);

@@ -1,7 +1,9 @@
 package models;
 
-import java.util.LinkedHashMap;
+import utils.StringUtils;
+
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 public abstract class User extends SerializableModel {
     public String firstName;
@@ -24,6 +26,17 @@ public abstract class User extends SerializableModel {
 
     public String getFullName() {
         return firstName + " " + lastName;
+    }
+
+    @Override
+    public String toFileString() {
+        return StringUtils.listToFileString(
+                String.valueOf(id),
+                firstName,
+                lastName,
+                email,
+                username,
+                password);
     }
 
     public Map<String, String> toKeyValueMap() {

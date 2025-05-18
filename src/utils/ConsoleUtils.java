@@ -20,12 +20,14 @@ public class ConsoleUtils {
         while (true) {
             System.out.print(prompt);
             try {
-                int value = scanner.nextInt();
+                // Using nextInt cause input buffer problems
+                String input = scanner.nextLine();
+                int value = Integer.parseInt(input);
                 if (value >= min && value <= max) {
                     return value;
                 }
                 System.out.println("Please enter a number between " + min + " and " + max);
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 System.out.println("Please enter a valid number");
             }
         }
@@ -99,6 +101,8 @@ public class ConsoleUtils {
             header.append(String.format("%-" + (columnWidths[i] + 2) + "s", allKeys.get(i)));
         }
         System.out.println(header);
+        printSeparator(header.length());
+
         for (var model : models) {
             StringBuilder row = new StringBuilder();
             for (int i = 0; i < allKeys.size(); i++) {
@@ -108,5 +112,7 @@ public class ConsoleUtils {
             }
             System.out.println(row);
         }
+
+        printSeparator(header.length());
     }
 }

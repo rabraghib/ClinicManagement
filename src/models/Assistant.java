@@ -1,7 +1,7 @@
 package models;
 
-import java.util.regex.Pattern;
-import utils.Constants;
+import utils.StringUtils;
+
 import java.util.Map;
 
 public class Assistant extends User {
@@ -15,16 +15,11 @@ public class Assistant extends User {
 
     @Override
     public String toFileString() {
-        return id + Constants.FILE_SEPARATOR +
-                firstName + Constants.FILE_SEPARATOR +
-                lastName + Constants.FILE_SEPARATOR +
-                email + Constants.FILE_SEPARATOR +
-                username + Constants.FILE_SEPARATOR +
-                password;
+        return super.toFileString();
     }
 
     public static Assistant fromFileString(String str) {
-        String[] parts = str.split(Pattern.quote(Constants.FILE_SEPARATOR));
+        String[] parts = StringUtils.fileStringToList(str);
         if (parts.length >= 6) {
             Assistant assistant = new Assistant();
             assistant.id = Long.parseLong(parts[0]);
@@ -40,8 +35,6 @@ public class Assistant extends User {
 
     @Override
     public Map<String, String> toKeyValueMap() {
-        Map<String, String> map = super.toKeyValueMap();
-        map.put("Role", "Assistant");
-        return map;
+        return super.toKeyValueMap();
     }
 }

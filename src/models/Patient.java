@@ -1,12 +1,11 @@
 package models;
 
-import utils.Constants;
 import utils.DateUtils;
+import utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
@@ -43,17 +42,18 @@ public class Patient extends SerializableModel {
 
     @Override
     public String toFileString() {
-        return id + Constants.FILE_SEPARATOR +
-                firstName + Constants.FILE_SEPARATOR +
-                lastName + Constants.FILE_SEPARATOR +
-                DateUtils.formatDate(dateOfBirth) + Constants.FILE_SEPARATOR +
-                gender + Constants.FILE_SEPARATOR +
-                email + Constants.FILE_SEPARATOR +
-                phone;
+        return StringUtils.listToFileString(
+                String.valueOf(id),
+                firstName,
+                lastName,
+                DateUtils.formatDate(dateOfBirth),
+                gender,
+                email,
+                phone);
     }
 
     public static Patient fromFileString(String str) {
-        String[] parts = str.split(Pattern.quote(Constants.FILE_SEPARATOR));
+        String[] parts = StringUtils.fileStringToList(str);
         if (parts.length >= 7) {
             Patient patient = new Patient();
             patient.id = Long.parseLong(parts[0]);
@@ -63,6 +63,8 @@ public class Patient extends SerializableModel {
             patient.gender = parts[4];
             patient.email = parts[5];
             patient.phone = parts[6];
+            // TODOO
+            // patient.appointments = appointments.Service;
             patient.medicalRecord = new MedicalRecord(patient);
             return patient;
         }
@@ -72,8 +74,7 @@ public class Patient extends SerializableModel {
     public Map<String, String> toKeyValueMap() {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("ID", String.valueOf(id));
-        map.put("First Name", firstName);
-        map.put("Last Name", lastName);
+        map.put("Name", getFullName());
         map.put("Email", email);
         map.put("Phone", phone);
         map.put("Date of Birth", DateUtils.formatDate(dateOfBirth));

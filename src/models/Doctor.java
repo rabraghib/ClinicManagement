@@ -1,8 +1,7 @@
 package models;
 
-import utils.Constants;
+import utils.StringUtils;
 import java.util.Date;
-import java.util.regex.Pattern;
 import java.util.Map;
 
 public class Doctor extends User {
@@ -31,17 +30,11 @@ public class Doctor extends User {
 
     @Override
     public String toFileString() {
-        return id + Constants.FILE_SEPARATOR +
-                firstName + Constants.FILE_SEPARATOR +
-                lastName + Constants.FILE_SEPARATOR +
-                email + Constants.FILE_SEPARATOR +
-                username + Constants.FILE_SEPARATOR +
-                password + Constants.FILE_SEPARATOR +
-                specialty;
+        return StringUtils.listToFileString(super.toFileString(), specialty);
     }
 
     public static Doctor fromFileString(String str) {
-        String[] parts = str.split(Pattern.quote(Constants.FILE_SEPARATOR));
+        String[] parts = StringUtils.fileStringToList(str);
         if (parts.length >= 7) {
             Doctor doctor = new Doctor();
             doctor.id = Long.parseLong(parts[0]);

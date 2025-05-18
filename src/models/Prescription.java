@@ -1,14 +1,13 @@
 package models;
 
-import utils.Constants;
-import java.util.Date;
-import java.util.regex.Pattern;
-import java.util.Map;
-import java.util.LinkedHashMap;
-
 import services.PatientService;
 import services.UserService;
 import utils.DateUtils;
+import utils.StringUtils;
+
+import java.util.Map;
+import java.util.Date;
+import java.util.LinkedHashMap;
 
 public class Prescription extends SerializableModel {
     public Date creationDate;
@@ -27,21 +26,21 @@ public class Prescription extends SerializableModel {
         this.description = description;
         this.doctor = doctor;
         this.patient = patient;
-        this.creationDate = new Date();
     }
 
     @Override
     public String toFileString() {
-        return id + Constants.FILE_SEPARATOR +
-                DateUtils.formatDate(creationDate) + Constants.FILE_SEPARATOR +
-                medication + Constants.FILE_SEPARATOR +
-                description + Constants.FILE_SEPARATOR +
-                (doctor != null ? doctor.id : "0") + Constants.FILE_SEPARATOR +
-                (patient != null ? patient.id : "0");
+        return StringUtils.listToFileString(
+                String.valueOf(id),
+                DateUtils.formatDate(creationDate),
+                medication,
+                description,
+                doctor != null ? String.valueOf(doctor.id) : "0",
+                patient != null ? String.valueOf(patient.id) : "0");
     }
 
     public static Prescription fromFileString(String str) {
-        String[] parts = str.split(Pattern.quote(Constants.FILE_SEPARATOR));
+        String[] parts = StringUtils.fileStringToList(str);
         if (parts.length >= 6) {
             Prescription prescription = new Prescription();
             prescription.id = Long.parseLong(parts[0]);

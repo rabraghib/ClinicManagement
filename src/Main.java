@@ -7,8 +7,7 @@ public class Main {
         while (true) {
             WelcomeView.show();
             LoginView.ensureLoggedIn();
-            MainMenuView mainMenu = new MainMenuView();
-            mainMenu.show();
+            new MainMenuView().show();
         }
     }
 }

@@ -88,6 +88,15 @@ public class AppointmentService {
                 a.patient.id.equals(patientId));
     }
 
+    public static List<Appointment> getTodayAppointments() {
+        Date today = new Date();
+        return findAppointments(a -> isSameDay(a.date, today));
+    }
+
+    public static List<Appointment> getPendingAppointments() {
+        return findAppointments(a -> !a.completed);
+    }
+
     private static boolean isSameDay(Date date1, Date date2) {
         if (date1 == null || date2 == null) {
             return false;

@@ -29,16 +29,16 @@ public class MainMenuView {
 
             switch (choice) {
                 case 1:
-                    // TODO: Show ClinicView
+                    new ClinicView().show();
                     break;
                 case 2:
-                    // TODO: Show PatientView
+                    new PatientView().show();
                     break;
                 case 3:
-                    // TODO: Show AppointmentView
+                    new AppointmentView().show();
                     break;
                 case 4:
-                    // TODO: Show PrescriptionView
+                    new PrescriptionView().show();
                     break;
                 case 5:
                     System.out.println("\nLogging out...");
