@@ -25,6 +25,7 @@ public class Prescription extends SerializableModel {
         this.description = description;
         this.doctor = doctor;
         this.patient = patient;
+        this.creationDate = new Date();
     }
 
     @Override
