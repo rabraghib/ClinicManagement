@@ -45,7 +45,7 @@ public class MedicalRecord extends SerializableModel {
 
     @Override
     public String toFileString() {
-        return StringUtils.listToFileString(
+        return StringUtils.toFileString(
                 String.valueOf(id),
                 patient != null ? String.valueOf(patient.id) : "0",
                 history);

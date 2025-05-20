@@ -32,7 +32,7 @@ public class Appointment extends SerializableModel {
 
     @Override
     public String toFileString() {
-        return StringUtils.listToFileString(
+        return StringUtils.toFileString(
                 String.valueOf(id),
                 DateUtils.formatDate(date),
                 String.valueOf(hour),

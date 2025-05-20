@@ -3,8 +3,8 @@ package services;
 import models.Appointment;
 import models.Doctor;
 import models.Patient;
+import utils.DateUtils;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Predicate;
@@ -70,7 +70,7 @@ public class AppointmentService {
     public static boolean isTimeSlotBooked(Date date, int hour, Long doctorId) {
         List<Appointment> doctorAppointments = find(a -> a.doctor != null && a.doctor.id.equals(doctorId));
         for (Appointment existing : doctorAppointments) {
-            if (isSameDay(existing.date, date) && existing.hour == hour) {
+            if (DateUtils.isSameDay(existing.date, date) && existing.hour == hour) {
                 return true;
             }
         }
@@ -80,7 +80,7 @@ public class AppointmentService {
     public static List<Appointment> getByDoctorIdAndDate(Long doctorId, Date date) {
         return find(a -> a.doctor != null &&
                 a.doctor.id.equals(doctorId) &&
-                isSameDay(a.date, date));
+                DateUtils.isSameDay(a.date, date));
     }
 
     public static List<Appointment> getByPatientId(Long patientId) {
@@ -90,23 +90,14 @@ public class AppointmentService {
 
     public static List<Appointment> getToday() {
         Date today = new Date();
-        return find(a -> isSameDay(a.date, today));
+        return find(a -> DateUtils.isSameDay(a.date, today));
     }
 
     public static List<Appointment> getPending() {
         return find(a -> !a.completed);
     }
 
-    private static boolean isSameDay(Date date1, Date date2) {
-        if (date1 == null || date2 == null) {
-            return false;
-        }
-        Calendar cal1 = Calendar.getInstance();
-        Calendar cal2 = Calendar.getInstance();
-        cal1.setTime(date1);
-        cal2.setTime(date2);
-        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
-                cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) &&
-                cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH);
+    public static List<Appointment> getByDateRange(Date startDate, Date endDate) {
+        return find(appointment -> DateUtils.isInRange(appointment.date, startDate, endDate));
     }
 }

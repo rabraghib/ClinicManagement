@@ -32,6 +32,7 @@ public class LoginView {
     }
 
     public static void logout() {
+        System.out.println("\nLogging out...");
         currentUser = null;
     }
 }

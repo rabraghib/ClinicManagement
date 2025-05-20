@@ -30,7 +30,7 @@ public class Doctor extends User {
 
     @Override
     public String toFileString() {
-        return StringUtils.listToFileString(super.toFileString(), specialty);
+        return StringUtils.toFileString(super.toFileString(), specialty);
     }
 
     public static Doctor fromFileString(String str) {

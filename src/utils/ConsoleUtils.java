@@ -34,6 +34,20 @@ public class ConsoleUtils {
         }
     }
 
+    public static boolean readBool(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim().toLowerCase();
+            if (input.equals("y") || input.equals("yes")) {
+                return true;
+            }
+            if (input.equals("n") || input.equals("no")) {
+                return false;
+            }
+            System.out.println("Please enter 'y' or 'n'");
+        }
+    }
+
     public static void printTitle(String title) {
         final int n = title.length();
         final int headerLength = Math.max(defaultLength, n + 10);

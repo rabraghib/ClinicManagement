@@ -30,7 +30,7 @@ public class Prescription extends SerializableModel {
 
     @Override
     public String toFileString() {
-        return StringUtils.listToFileString(
+        return StringUtils.toFileString(
                 String.valueOf(id),
                 DateUtils.formatDate(creationDate),
                 medication,

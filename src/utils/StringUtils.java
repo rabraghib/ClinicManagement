@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 public class StringUtils {
 
-    public static String listToFileString(String... strings) {
+    public static String toFileString(String... strings) {
         if (strings == null || strings.length == 0) {
             return "";
         }

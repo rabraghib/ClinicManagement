@@ -30,7 +30,7 @@ public abstract class User extends SerializableModel {
 
     @Override
     public String toFileString() {
-        return StringUtils.listToFileString(
+        return StringUtils.toFileString(
                 String.valueOf(id),
                 firstName,
                 lastName,
