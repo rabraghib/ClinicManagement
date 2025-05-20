@@ -13,7 +13,7 @@ public class ClinicService {
         repo.saveAll(List.of(clinic));
     }
 
-    public static Clinic getClinic() {
+    public static Clinic get() {
         Clinic clinic = repo.loadById(clinicId);
         if (clinic == null) {
             clinic = new Clinic(clinicId, "ENSAM Clinic", "Sidi Othman, Casablanca", "General", "0600-123456");
@@ -21,7 +21,7 @@ public class ClinicService {
         }
         clinic.doctors = UserService.getAllDoctors();
         clinic.assistants = UserService.getAllAssistants();
-        clinic.patients = PatientService.getAllPatients();
+        clinic.patients = PatientService.getAll();
         return clinic;
     }
 }

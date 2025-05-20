@@ -17,7 +17,7 @@ public class ClinicView {
             ConsoleUtils.clearScreen();
             ConsoleUtils.printTitle("Clinic Management");
 
-            final Clinic clinic = ClinicService.getClinic();
+            final Clinic clinic = ClinicService.get();
             ConsoleUtils.printModelInfo(clinic.toKeyValueMap());
 
             System.out.println("\nPlease select an option:");
@@ -43,7 +43,7 @@ public class ClinicView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Update Clinic Information");
 
-        final Clinic clinic = ClinicService.getClinic();
+        final Clinic clinic = ClinicService.get();
         System.out.println("\nCurrent Information:");
         ConsoleUtils.printModelInfo(clinic.toKeyValueMap());
 
@@ -79,7 +79,7 @@ public class ClinicView {
             ConsoleUtils.clearScreen();
             ConsoleUtils.printTitle("Manage Doctors");
 
-            final Clinic clinic = ClinicService.getClinic();
+            final Clinic clinic = ClinicService.get();
             List<Doctor> doctors = clinic.doctors;
             List<Map<String, String>> doctorsData = doctors.stream()
                     .map(Doctor::toKeyValueMap)
@@ -111,7 +111,7 @@ public class ClinicView {
             ConsoleUtils.clearScreen();
             ConsoleUtils.printTitle("Manage Assistants");
 
-            final Clinic clinic = ClinicService.getClinic();
+            final Clinic clinic = ClinicService.get();
             List<Assistant> assistants = clinic.assistants;
             List<Map<String, String>> assistantsData = assistants.stream()
                     .map(Assistant::toKeyValueMap)
@@ -171,7 +171,7 @@ public class ClinicView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Edit Doctor");
 
-        final Clinic clinic = ClinicService.getClinic();
+        final Clinic clinic = ClinicService.get();
         List<Doctor> doctors = clinic.doctors;
         if (doctors.isEmpty()) {
             System.out.println("No doctors available to edit.");
@@ -228,7 +228,7 @@ public class ClinicView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Remove Doctor");
 
-        final Clinic clinic = ClinicService.getClinic();
+        final Clinic clinic = ClinicService.get();
         List<Doctor> doctors = clinic.doctors;
         if (doctors.isEmpty()) {
             System.out.println("No doctors available to remove.");
@@ -284,7 +284,7 @@ public class ClinicView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Edit Assistant");
 
-        final Clinic clinic = ClinicService.getClinic();
+        final Clinic clinic = ClinicService.get();
         List<Assistant> assistants = clinic.assistants;
         if (assistants.isEmpty()) {
             System.out.println("No assistants available to edit.");
@@ -337,7 +337,7 @@ public class ClinicView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Remove Assistant");
 
-        final Clinic clinic = ClinicService.getClinic();
+        final Clinic clinic = ClinicService.get();
         List<Assistant> assistants = clinic.assistants;
         if (assistants.isEmpty()) {
             System.out.println("No assistants available to remove.");

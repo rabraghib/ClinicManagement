@@ -12,50 +12,50 @@ public class PatientService {
     private static final DataRepository<Patient> repo = new DataRepository<>("data/patients.txt",
             Patient::fromFileString);
 
-    public static List<Patient> getAllPatients() {
+    public static List<Patient> getAll() {
         return repo.loadAll();
     }
 
-    public static Patient savePatient(Patient patient) {
+    public static Patient save(Patient patient) {
         return repo.save(patient);
     }
 
-    public static Patient getPatientById(Long id) {
+    public static Patient getById(Long id) {
         return repo.loadById(id);
     }
 
-    public static boolean removePatient(Long id) {
+    public static boolean remove(Long id) {
         return repo.remove(id);
     }
 
-    public static List<Patient> findPatients(Predicate<Patient> predicate) {
-        return getAllPatients().stream()
+    public static List<Patient> find(Predicate<Patient> predicate) {
+        return getAll().stream()
                 .filter(predicate)
                 .collect(Collectors.toList());
     }
 
-    public static List<Patient> findPatientsByName(String name) {
+    public static List<Patient> findByName(String name) {
         if (name == null || name.trim().isEmpty()) {
-            return getAllPatients();
+            return getAll();
         }
         String searchTerm = name.toLowerCase().trim();
-        return findPatients(p -> (p.firstName + " " + p.lastName).toLowerCase().contains(searchTerm) ||
+        return find(p -> (p.firstName + " " + p.lastName).toLowerCase().contains(searchTerm) ||
                 p.firstName.toLowerCase().contains(searchTerm) ||
                 p.lastName.toLowerCase().contains(searchTerm));
     }
 
-    public static Patient createPatient(String firstName, String lastName,
+    public static Patient create(String firstName, String lastName,
             Date dateOfBirth, String gender,
             String email, String phone) {
         Patient patient = new Patient(null, firstName, lastName, dateOfBirth, gender, email, phone);
         patient.medicalRecord = new MedicalRecord(patient);
-        return savePatient(patient);
+        return save(patient);
     }
 
-    public static Patient updatePatient(Long id, String firstName, String lastName,
+    public static Patient update(Long id, String firstName, String lastName,
             Date dateOfBirth, String gender,
             String email, String phone) {
-        Patient patient = getPatientById(id);
+        Patient patient = getById(id);
         if (patient == null) {
             return null;
         }
@@ -67,6 +67,6 @@ public class PatientService {
         patient.email = email;
         patient.phone = phone;
 
-        return savePatient(patient);
+        return save(patient);
     }
 }

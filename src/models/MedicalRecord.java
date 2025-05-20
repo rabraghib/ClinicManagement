@@ -56,7 +56,7 @@ public class MedicalRecord extends SerializableModel {
         if (parts.length >= 3) {
             MedicalRecord record = new MedicalRecord();
             record.id = Long.parseLong(parts[0]);
-            record.patient = PatientService.getPatientById(Long.parseLong(parts[1]));
+            record.patient = PatientService.getById(Long.parseLong(parts[1]));
             record.history = parts[2];
             // TODO:
             // record.prescriptions = PrescriptionService.

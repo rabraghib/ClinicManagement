@@ -23,7 +23,7 @@ public class MainMenuView {
             System.out.println("4. Prescription");
             System.out.println("5. Logout");
             System.out.println("6. Exit");
-            System.out.println("\n" + "=".repeat(50));
+            System.out.println();
 
             int choice = ConsoleUtils.readInt("Enter your choice (1-6): ", 1, 6);
 

@@ -48,7 +48,7 @@ public class Prescription extends SerializableModel {
             prescription.medication = parts[2];
             prescription.description = parts[3];
             prescription.doctor = UserService.getDoctorById(Long.parseLong(parts[4]));
-            prescription.patient = PatientService.getPatientById(Long.parseLong(parts[5]));
+            prescription.patient = PatientService.getById(Long.parseLong(parts[5]));
             return prescription;
         }
         return null;

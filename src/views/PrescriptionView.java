@@ -43,7 +43,7 @@ public class PrescriptionView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("All Prescriptions");
 
-        List<Prescription> prescriptions = PrescriptionService.getAllPrescriptions();
+        List<Prescription> prescriptions = PrescriptionService.getAll();
         if (prescriptions.isEmpty()) {
             System.out.println("No prescriptions found.");
             ConsoleUtils.waitForEnter();
@@ -62,7 +62,7 @@ public class PrescriptionView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Patient Prescriptions");
 
-        List<Patient> patients = PatientService.getAllPatients();
+        List<Patient> patients = PatientService.getAll();
         if (patients.isEmpty()) {
             System.out.println("No patients available.");
             ConsoleUtils.waitForEnter();
@@ -80,7 +80,7 @@ public class PrescriptionView {
             return;
 
         Patient patient = patients.get(patientIndex);
-        List<Prescription> prescriptions = PrescriptionService.getPatientPrescriptions(patient.id);
+        List<Prescription> prescriptions = PrescriptionService.getByPatientId(patient.id);
 
         if (prescriptions.isEmpty()) {
             System.out.println("\nNo prescriptions found for this patient.");
@@ -100,10 +100,9 @@ public class PrescriptionView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Create New Prescription");
 
-        // Select Patient
-        List<Patient> patients = PatientService.getAllPatients();
+        List<Patient> patients = PatientService.getAll();
         if (patients.isEmpty()) {
-            System.out.println("No patients available. Please add a patient first.");
+            System.out.println("No patients available.");
             ConsoleUtils.waitForEnter();
             return;
         }
@@ -113,15 +112,16 @@ public class PrescriptionView {
                 .toList();
 
         ConsoleUtils.printModelList(patientsData);
+
         int patientIndex = ConsoleUtils.readInt("\nSelect patient (0 to cancel): ", 0, patients.size()) - 1;
         if (patientIndex == -1)
             return;
+
         Patient patient = patients.get(patientIndex);
 
-        // Select Doctor
         List<Doctor> doctors = UserService.getAllDoctors();
         if (doctors.isEmpty()) {
-            System.out.println("No doctors available. Please add a doctor first.");
+            System.out.println("No doctors available.");
             ConsoleUtils.waitForEnter();
             return;
         }
@@ -131,20 +131,20 @@ public class PrescriptionView {
                 .toList();
 
         ConsoleUtils.printModelList(doctorsData);
+
         int doctorIndex = ConsoleUtils.readInt("\nSelect doctor (0 to cancel): ", 0, doctors.size()) - 1;
         if (doctorIndex == -1)
             return;
+
         Doctor doctor = doctors.get(doctorIndex);
 
-        System.out.print("\nEnter medication: ");
+        System.out.print("\nMedication: ");
         String medication = ConsoleUtils.readLine();
 
-        System.out.print("Enter description: ");
+        System.out.print("Description: ");
         String description = ConsoleUtils.readLine();
 
-        Prescription prescription = new Prescription(null, medication, description, doctor, patient);
-        PrescriptionService.savePrescription(prescription);
-
+        PrescriptionService.create(medication, description, doctor.id, patient.id);
         System.out.println("\nPrescription created successfully!");
         ConsoleUtils.waitForEnter();
     }
@@ -153,7 +153,7 @@ public class PrescriptionView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Edit Prescription");
 
-        List<Prescription> prescriptions = PrescriptionService.getAllPrescriptions();
+        List<Prescription> prescriptions = PrescriptionService.getAll();
         if (prescriptions.isEmpty()) {
             System.out.println("No prescriptions available to edit.");
             ConsoleUtils.waitForEnter();
@@ -185,7 +185,7 @@ public class PrescriptionView {
         if (!description.isEmpty())
             prescription.description = description;
 
-        PrescriptionService.savePrescription(prescription);
+        PrescriptionService.save(prescription);
 
         System.out.println("\nPrescription updated successfully!");
         ConsoleUtils.waitForEnter();
@@ -195,7 +195,7 @@ public class PrescriptionView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Remove Prescription");
 
-        List<Prescription> prescriptions = PrescriptionService.getAllPrescriptions();
+        List<Prescription> prescriptions = PrescriptionService.getAll();
         if (prescriptions.isEmpty()) {
             System.out.println("No prescriptions available to remove.");
             ConsoleUtils.waitForEnter();
@@ -214,7 +214,7 @@ public class PrescriptionView {
             return;
 
         Prescription prescription = prescriptions.get(prescriptionIndex);
-        PrescriptionService.removePrescription(prescription.id);
+        PrescriptionService.remove(prescription.id);
 
         System.out.println("\nPrescription removed successfully!");
         ConsoleUtils.waitForEnter();

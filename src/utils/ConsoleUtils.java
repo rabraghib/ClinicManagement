@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class ConsoleUtils {
+    static final int defaultLength = 50;
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void clearScreen() {
@@ -35,7 +36,7 @@ public class ConsoleUtils {
 
     public static void printTitle(String title) {
         final int n = title.length();
-        final int headerLength = Math.max(50, n + 10);
+        final int headerLength = Math.max(defaultLength, n + 10);
         printSeparator(headerLength);
         final int leftPadding = Math.max(5, (headerLength - n) / 2);
         System.out.println(" ".repeat(leftPadding) + title);
@@ -43,7 +44,7 @@ public class ConsoleUtils {
     }
 
     public static void printSeparator() {
-        printSeparator(50);
+        printSeparator(defaultLength);
     }
 
     public static void printSeparator(int length) {

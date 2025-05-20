@@ -12,57 +12,57 @@ public class MedicalRecordService {
     private static final DataRepository<MedicalRecord> repo = new DataRepository<>("data/medical-records.txt",
             MedicalRecord::fromFileString);
 
-    public static List<MedicalRecord> getAllMedicalRecords() {
+    public static List<MedicalRecord> getAll() {
         return repo.loadAll();
     }
 
-    public static MedicalRecord saveMedicalRecord(MedicalRecord record) {
+    public static MedicalRecord save(MedicalRecord record) {
         return repo.save(record);
     }
 
-    public static MedicalRecord getMedicalRecordById(Long id) {
+    public static MedicalRecord getById(Long id) {
         return repo.loadById(id);
     }
 
-    public static MedicalRecord getMedicalRecordByPatientId(Long patientId) {
-        List<MedicalRecord> records = findMedicalRecords(r -> r.getPatient() != null &&
+    public static MedicalRecord getByPatientId(Long patientId) {
+        List<MedicalRecord> records = find(r -> r.getPatient() != null &&
                 r.getPatient().id.equals(patientId));
         return records.isEmpty() ? null : records.get(0);
     }
 
-    public static boolean removeMedicalRecord(Long id) {
+    public static boolean remove(Long id) {
         return repo.remove(id);
     }
 
-    public static List<MedicalRecord> findMedicalRecords(Predicate<MedicalRecord> predicate) {
-        List<MedicalRecord> records = getAllMedicalRecords();
+    public static List<MedicalRecord> find(Predicate<MedicalRecord> predicate) {
+        List<MedicalRecord> records = getAll();
         return records.stream()
                 .filter(predicate)
                 .collect(Collectors.toList());
     }
 
-    public static MedicalRecord updateMedicalRecordHistory(Long id, String newEntry) {
-        MedicalRecord record = getMedicalRecordById(id);
+    public static MedicalRecord updateHistory(Long id, String newEntry) {
+        MedicalRecord record = getById(id);
         if (record == null) {
             return null;
         }
 
         record.updateHistory(newEntry);
-        return saveMedicalRecord(record);
+        return save(record);
     }
 
-    public static MedicalRecord addPrescriptionToMedicalRecord(Long recordId, Prescription prescription) {
-        MedicalRecord record = getMedicalRecordById(recordId);
+    public static MedicalRecord addPrescription(Long recordId, Prescription prescription) {
+        MedicalRecord record = getById(recordId);
         if (record == null) {
             return null;
         }
 
         record.prescriptions.add(prescription);
-        return saveMedicalRecord(record);
+        return save(record);
     }
 
-    public static MedicalRecord createMedicalRecord(Patient patient) {
+    public static MedicalRecord create(Patient patient) {
         MedicalRecord record = new MedicalRecord(patient);
-        return saveMedicalRecord(record);
+        return save(record);
     }
 }

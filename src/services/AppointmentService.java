@@ -15,31 +15,31 @@ public class AppointmentService {
     private static final DataRepository<Appointment> repo = new DataRepository<>("data/appointments.txt",
             Appointment::fromFileString);
 
-    public static List<Appointment> getAllAppointments() {
+    public static List<Appointment> getAll() {
         return repo.loadAll();
     }
 
-    public static Appointment saveAppointment(Appointment appointment) {
+    public static Appointment save(Appointment appointment) {
         return repo.save(appointment);
     }
 
-    public static Appointment getAppointmentById(Long id) {
+    public static Appointment getById(Long id) {
         return repo.loadById(id);
     }
 
-    public static boolean removeAppointment(Long id) {
+    public static boolean remove(Long id) {
         return repo.remove(id);
     }
 
-    public static List<Appointment> findAppointments(Predicate<Appointment> predicate) {
-        List<Appointment> appointments = getAllAppointments();
+    public static List<Appointment> find(Predicate<Appointment> predicate) {
+        List<Appointment> appointments = getAll();
         return appointments.stream()
                 .filter(predicate)
                 .collect(Collectors.toList());
     }
 
-    public static Appointment createAppointment(Date date, int hour, Long patientId, Long doctorId) {
-        Patient patient = PatientService.getPatientById(patientId);
+    public static Appointment create(Date date, int hour, Long patientId, Long doctorId) {
+        Patient patient = PatientService.getById(patientId);
         Doctor doctor = UserService.getDoctorById(doctorId);
         if (patient == null || doctor == null) {
             return null;
@@ -48,11 +48,11 @@ public class AppointmentService {
             return null;
         }
         Appointment appointment = new Appointment(null, date, hour, patient, doctor);
-        return saveAppointment(appointment);
+        return save(appointment);
     }
 
-    public static Appointment updateAppointment(Long id, Date date, int hour, boolean completed, String notes) {
-        Appointment appointment = getAppointmentById(id);
+    public static Appointment update(Long id, Date date, int hour, boolean completed, String notes) {
+        Appointment appointment = getById(id);
         if (appointment == null) {
             return null;
         }
@@ -64,11 +64,11 @@ public class AppointmentService {
         appointment.hour = hour;
         appointment.completed = completed;
         appointment.notes = notes;
-        return saveAppointment(appointment);
+        return save(appointment);
     }
 
     public static boolean isTimeSlotBooked(Date date, int hour, Long doctorId) {
-        List<Appointment> doctorAppointments = findAppointments(a -> a.doctor != null && a.doctor.id.equals(doctorId));
+        List<Appointment> doctorAppointments = find(a -> a.doctor != null && a.doctor.id.equals(doctorId));
         for (Appointment existing : doctorAppointments) {
             if (isSameDay(existing.date, date) && existing.hour == hour) {
                 return true;
@@ -77,24 +77,24 @@ public class AppointmentService {
         return false;
     }
 
-    public static List<Appointment> getDoctorAppointmentsForDate(Long doctorId, Date date) {
-        return findAppointments(a -> a.doctor != null &&
+    public static List<Appointment> getByDoctorIdAndDate(Long doctorId, Date date) {
+        return find(a -> a.doctor != null &&
                 a.doctor.id.equals(doctorId) &&
                 isSameDay(a.date, date));
     }
 
-    public static List<Appointment> getPatientAppointments(Long patientId) {
-        return findAppointments(a -> a.patient != null &&
+    public static List<Appointment> getByPatientId(Long patientId) {
+        return find(a -> a.patient != null &&
                 a.patient.id.equals(patientId));
     }
 
-    public static List<Appointment> getTodayAppointments() {
+    public static List<Appointment> getToday() {
         Date today = new Date();
-        return findAppointments(a -> isSameDay(a.date, today));
+        return find(a -> isSameDay(a.date, today));
     }
 
-    public static List<Appointment> getPendingAppointments() {
-        return findAppointments(a -> !a.completed);
+    public static List<Appointment> getPending() {
+        return find(a -> !a.completed);
     }
 
     private static boolean isSameDay(Date date1, Date date2) {

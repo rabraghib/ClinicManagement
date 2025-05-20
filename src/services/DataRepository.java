@@ -73,7 +73,7 @@ public class DataRepository<T extends SerializableModel> {
         List<T> models = loadAll();
         boolean found = false;
         for (int i = 0; i < models.size(); i++) {
-            if (models.get(i).id == model.id) {
+            if (models.get(i).id.equals(model.id)) {
                 models.set(i, model);
                 found = true;
                 break;
@@ -88,7 +88,7 @@ public class DataRepository<T extends SerializableModel> {
     public T loadById(Long id) {
         List<T> models = loadAll();
         for (T model : models) {
-            if (model.id == id)
+            if (model.id.equals(id))
                 return model;
         }
         return null;
@@ -98,7 +98,7 @@ public class DataRepository<T extends SerializableModel> {
         List<T> models = loadAll();
         boolean removed = false;
         for (int i = 0; i < models.size(); i++) {
-            if (models.get(i).id == id) {
+            if (models.get(i).id.equals(id)) {
                 models.remove(i);
                 removed = true;
                 break;

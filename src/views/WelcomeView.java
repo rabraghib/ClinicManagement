@@ -8,7 +8,7 @@ import utils.ConsoleUtils;
 public class WelcomeView {
     public static void show() {
         ConsoleUtils.clearScreen();
-        final Clinic clinic = ClinicService.getClinic();
+        final Clinic clinic = ClinicService.get();
         ConsoleUtils.printTitle("Welcome to " + clinic.name);
 
         final User currentUser = LoginView.getCurrentUser();

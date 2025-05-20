@@ -42,7 +42,7 @@ public class PatientView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("All Patients");
 
-        List<Patient> patients = PatientService.getAllPatients();
+        List<Patient> patients = PatientService.getAll();
         if (patients.isEmpty()) {
             System.out.println("No patients found.");
             ConsoleUtils.waitForEnter();
@@ -64,12 +64,7 @@ public class PatientView {
         System.out.print("\nEnter search term: ");
         String searchTerm = ConsoleUtils.readLine();
 
-        List<Patient> patients = PatientService.findPatients(
-                p -> String.join(" ",
-                        p.firstName,
-                        p.lastName,
-                        p.email,
-                        p.phone).contains(searchTerm));
+        List<Patient> patients = PatientService.findByName(searchTerm);
         if (patients.isEmpty()) {
             System.out.println("\nNo patients found matching the search criteria.");
             ConsoleUtils.waitForEnter();
@@ -106,9 +101,7 @@ public class PatientView {
         System.out.print("Gender (M/F): ");
         String gender = ConsoleUtils.readLine();
 
-        Patient patient = new Patient(null, firstName, lastName, dateOfBirth, gender, email, phone);
-        PatientService.savePatient(patient);
-
+        PatientService.create(firstName, lastName, dateOfBirth, gender, email, phone);
         System.out.println("\nPatient added successfully!");
         ConsoleUtils.waitForEnter();
     }
@@ -117,7 +110,7 @@ public class PatientView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Edit Patient");
 
-        List<Patient> patients = PatientService.getAllPatients();
+        List<Patient> patients = PatientService.getAll();
         if (patients.isEmpty()) {
             System.out.println("No patients available to edit.");
             ConsoleUtils.waitForEnter();
@@ -159,17 +152,21 @@ public class PatientView {
         if (!phone.isEmpty())
             patient.phone = phone;
 
-        System.out.print("Date of Birth [" + patient.dateOfBirth + "]: ");
-        Date dateOfBirth = DateUtils.parseDate(ConsoleUtils.readLine());
-        if (dateOfBirth != null)
-            patient.dateOfBirth = dateOfBirth;
+        System.out.print("Date of Birth [" + DateUtils.formatDate(patient.dateOfBirth) + "] (YYYY-MM-DD): ");
+        String dateStr = ConsoleUtils.readLine();
+        if (!dateStr.isEmpty()) {
+            Date dateOfBirth = DateUtils.parseDate(dateStr);
+            if (dateOfBirth != null)
+                patient.dateOfBirth = dateOfBirth;
+        }
 
         System.out.print("Gender [" + patient.gender + "]: ");
         String gender = ConsoleUtils.readLine();
         if (!gender.isEmpty())
             patient.gender = gender;
 
-        PatientService.savePatient(patient);
+        PatientService.update(patient.id, patient.firstName, patient.lastName, patient.dateOfBirth, patient.gender,
+                patient.email, patient.phone);
 
         System.out.println("\nPatient updated successfully!");
         ConsoleUtils.waitForEnter();
@@ -179,7 +176,7 @@ public class PatientView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Remove Patient");
 
-        List<Patient> patients = PatientService.getAllPatients();
+        List<Patient> patients = PatientService.getAll();
         if (patients.isEmpty()) {
             System.out.println("No patients available to remove.");
             ConsoleUtils.waitForEnter();
@@ -198,7 +195,7 @@ public class PatientView {
             return;
 
         Patient patient = patients.get(patientIndex);
-        PatientService.removePatient(patient.id);
+        PatientService.remove(patient.id);
 
         System.out.println("\nPatient removed successfully!");
         ConsoleUtils.waitForEnter();

@@ -49,7 +49,7 @@ public class Appointment extends SerializableModel {
             appointment.id = Long.parseLong(parts[0]);
             appointment.date = DateUtils.parseDate(parts[1]);
             appointment.hour = Integer.parseInt(parts[2]);
-            appointment.patient = PatientService.getPatientById(Long.parseLong(parts[3]));
+            appointment.patient = PatientService.getById(Long.parseLong(parts[3]));
             appointment.doctor = UserService.getDoctorById(Long.parseLong(parts[4]));
             appointment.notes = parts[5];
             appointment.completed = Boolean.parseBoolean(parts[6]);

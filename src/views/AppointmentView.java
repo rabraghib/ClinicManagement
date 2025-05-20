@@ -48,7 +48,7 @@ public class AppointmentView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("All Appointments");
 
-        List<Appointment> appointments = AppointmentService.getAllAppointments();
+        List<Appointment> appointments = AppointmentService.getAll();
         if (appointments.isEmpty()) {
             System.out.println("No appointments found.");
             ConsoleUtils.waitForEnter();
@@ -67,7 +67,7 @@ public class AppointmentView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Today's Appointments");
 
-        List<Appointment> appointments = AppointmentService.getTodayAppointments();
+        List<Appointment> appointments = AppointmentService.getToday();
         if (appointments.isEmpty()) {
             System.out.println("No appointments scheduled for today.");
             ConsoleUtils.waitForEnter();
@@ -86,10 +86,9 @@ public class AppointmentView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Schedule New Appointment");
 
-        // Select Patient
-        List<Patient> patients = PatientService.getAllPatients();
+        List<Patient> patients = PatientService.getAll();
         if (patients.isEmpty()) {
-            System.out.println("No patients available. Please add a patient first.");
+            System.out.println("No patients available.");
             ConsoleUtils.waitForEnter();
             return;
         }
@@ -99,15 +98,16 @@ public class AppointmentView {
                 .toList();
 
         ConsoleUtils.printModelList(patientsData);
+
         int patientIndex = ConsoleUtils.readInt("\nSelect patient (0 to cancel): ", 0, patients.size()) - 1;
         if (patientIndex == -1)
             return;
+
         Patient patient = patients.get(patientIndex);
 
-        // Select Doctor
         List<Doctor> doctors = UserService.getAllDoctors();
         if (doctors.isEmpty()) {
-            System.out.println("No doctors available. Please add a doctor first.");
+            System.out.println("No doctors available.");
             ConsoleUtils.waitForEnter();
             return;
         }
@@ -117,13 +117,14 @@ public class AppointmentView {
                 .toList();
 
         ConsoleUtils.printModelList(doctorsData);
+
         int doctorIndex = ConsoleUtils.readInt("\nSelect doctor (0 to cancel): ", 0, doctors.size()) - 1;
         if (doctorIndex == -1)
             return;
+
         Doctor doctor = doctors.get(doctorIndex);
 
-        // Get Date and Time
-        System.out.print("\nEnter date (YYYY-MM-DD): ");
+        System.out.print("\nDate (YYYY-MM-DD): ");
         Date date = DateUtils.parseDate(ConsoleUtils.readLine());
         if (date == null) {
             System.out.println("Invalid date format.");
@@ -131,15 +132,21 @@ public class AppointmentView {
             return;
         }
 
-        System.out.print("Enter hour (0-23): ");
+        System.out.print("Hour (0-23): ");
         int hour = ConsoleUtils.readInt("", 0, 23);
 
-        System.out.print("Enter notes (optional): ");
-        String notes = ConsoleUtils.readLine();
+        if (AppointmentService.isTimeSlotBooked(date, hour, doctor.id)) {
+            System.out.println("\nThis time slot is already booked.");
+            ConsoleUtils.waitForEnter();
+            return;
+        }
 
-        Appointment appointment = new Appointment(null, date, hour, patient, doctor);
-        appointment.notes = notes;
-        AppointmentService.saveAppointment(appointment);
+        Appointment appointment = AppointmentService.create(date, hour, patient.id, doctor.id);
+        if (appointment == null) {
+            System.out.println("\nFailed to create appointment.");
+            ConsoleUtils.waitForEnter();
+            return;
+        }
 
         System.out.println("\nAppointment scheduled successfully!");
         ConsoleUtils.waitForEnter();
@@ -149,7 +156,7 @@ public class AppointmentView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Edit Appointment");
 
-        List<Appointment> appointments = AppointmentService.getAllAppointments();
+        List<Appointment> appointments = AppointmentService.getAll();
         if (appointments.isEmpty()) {
             System.out.println("No appointments available to edit.");
             ConsoleUtils.waitForEnter();
@@ -171,16 +178,21 @@ public class AppointmentView {
 
         System.out.println("\nEnter new information (press Enter to keep current value):");
 
-        System.out.print("Date [" + appointment.date + "] (YYYY-MM-DD): ");
+        System.out.print("Date (YYYY-MM-DD) [" + DateUtils.formatDate(appointment.date) + "]: ");
         String dateStr = ConsoleUtils.readLine();
+        Date date = null;
         if (!dateStr.isEmpty()) {
-            Date date = DateUtils.parseDate(dateStr);
-            if (date != null)
-                appointment.date = date;
+            date = DateUtils.parseDate(dateStr);
+            if (date == null) {
+                System.out.println("Invalid date format.");
+                ConsoleUtils.waitForEnter();
+                return;
+            }
         }
 
-        System.out.print("Hour [" + appointment.hour + "]: ");
+        System.out.print("Hour (0-23) [" + appointment.hour + "]: ");
         String hourStr = ConsoleUtils.readLine();
+
         if (!hourStr.isEmpty()) {
             try {
                 int hour = Integer.parseInt(hourStr);
@@ -196,7 +208,7 @@ public class AppointmentView {
         if (!notes.isEmpty())
             appointment.notes = notes;
 
-        AppointmentService.saveAppointment(appointment);
+        AppointmentService.save(appointment);
 
         System.out.println("\nAppointment updated successfully!");
         ConsoleUtils.waitForEnter();
@@ -206,7 +218,7 @@ public class AppointmentView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Cancel Appointment");
 
-        List<Appointment> appointments = AppointmentService.getAllAppointments();
+        List<Appointment> appointments = AppointmentService.getAll();
         if (appointments.isEmpty()) {
             System.out.println("No appointments available to cancel.");
             ConsoleUtils.waitForEnter();
@@ -225,7 +237,7 @@ public class AppointmentView {
             return;
 
         Appointment appointment = appointments.get(appointmentIndex);
-        AppointmentService.removeAppointment(appointment.id);
+        AppointmentService.remove(appointment.id);
 
         System.out.println("\nAppointment cancelled successfully!");
         ConsoleUtils.waitForEnter();
@@ -235,7 +247,7 @@ public class AppointmentView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Complete Appointment");
 
-        List<Appointment> appointments = AppointmentService.getPendingAppointments();
+        List<Appointment> appointments = AppointmentService.getPending();
         if (appointments.isEmpty()) {
             System.out.println("No pending appointments available.");
             ConsoleUtils.waitForEnter();
@@ -255,7 +267,7 @@ public class AppointmentView {
 
         Appointment appointment = appointments.get(appointmentIndex);
         appointment.completed = true;
-        AppointmentService.saveAppointment(appointment);
+        AppointmentService.save(appointment);
 
         System.out.println("\nAppointment marked as completed!");
         ConsoleUtils.waitForEnter();

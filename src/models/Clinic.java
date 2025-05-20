@@ -57,7 +57,7 @@ public class Clinic extends SerializableModel {
             clinic.phone = parts[4];
             clinic.doctors = UserService.getAllDoctors();
             clinic.assistants = UserService.getAllAssistants();
-            clinic.patients = PatientService.getAllPatients();
+            clinic.patients = PatientService.getAll();
             return clinic;
         }
         return null;
