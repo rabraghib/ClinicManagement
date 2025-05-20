@@ -90,16 +90,19 @@ public class ConsoleUtils {
     }
 
     public static void printModelList(List<? extends SerializableModel> models) {
+        printModelList(models, 1);
+    }
+
+    public static void printModelList(List<? extends SerializableModel> models, int startNum) {
         if (models == null || models.isEmpty()) {
             System.out.println("No data available");
             return;
         }
         var allValues = models.stream().map(m -> m.toViewListString()).toList();
         System.out.println();
-        int maxIndexLength = String.valueOf(models.size()).length();
+        int maxIndexLength = String.valueOf(startNum + models.size()).length();
         for (int i = 0; i < models.size(); i++) {
-            String index = String.valueOf(i + 1);
-            String paddedIndex = index + ".";
+            String paddedIndex = String.valueOf(i + startNum) + ".";
             System.out.printf("%-" + (maxIndexLength + 2) + "s %s\n", paddedIndex, allValues.get(i));
         }
         System.out.println();

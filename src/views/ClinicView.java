@@ -84,7 +84,7 @@ public class ClinicView {
             ConsoleUtils.printModelList(doctors);
 
             System.out.println("\nAssistants:");
-            ConsoleUtils.printModelList(assistants);
+            ConsoleUtils.printModelList(assistants, doctors.size() + 1);
 
             System.out.println("\nPlease select an option:");
             System.out.println("1. Add");
@@ -156,7 +156,7 @@ public class ClinicView {
         ConsoleUtils.printModelList(doctors);
 
         System.out.println("\nAssistants:");
-        ConsoleUtils.printModelList(assistants);
+        ConsoleUtils.printModelList(assistants, doctors.size() + 1);
 
         int totalEmployees = doctors.size() + assistants.size();
         if (totalEmployees == 0) {
