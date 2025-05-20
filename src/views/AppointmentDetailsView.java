@@ -115,7 +115,7 @@ public class AppointmentDetailsView {
         }
 
         System.out.println();
-        final boolean confirm = ConsoleUtils.readBool("Mark appointment as completed? (y/n)");
+        final boolean confirm = ConsoleUtils.readBool("Mark appointment as completed?");
         if (!confirm) {
             ConsoleUtils.waitForEnter();
             return;

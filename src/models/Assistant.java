@@ -1,7 +1,6 @@
 package models;
 
 import utils.StringUtils;
-
 import java.util.Map;
 
 public class Assistant extends User {
@@ -34,7 +33,14 @@ public class Assistant extends User {
     }
 
     @Override
+    public String toViewListString() {
+        return super.toViewListString() + " (Assistant)";
+    }
+
+    @Override
     public Map<String, String> toKeyValueMap() {
-        return super.toKeyValueMap();
+        Map<String, String> map = super.toKeyValueMap();
+        map.put("Role", "Assistant");
+        return map;
     }
 }

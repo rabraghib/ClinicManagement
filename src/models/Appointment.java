@@ -53,21 +53,29 @@ public class Appointment extends SerializableModel {
             appointment.doctor = UserService.getDoctorById(Long.parseLong(parts[4]));
             appointment.notes = parts[5];
             appointment.completed = Boolean.parseBoolean(parts[6]);
-
             return appointment;
         }
         return null;
     }
 
+    @Override
+    public String toViewListString() {
+        return String.format("%s at %02d:00 - %s with Dr. %s",
+                DateUtils.formatDate(date), hour,
+                patient != null ? patient.getFullName() : "N/A",
+                doctor != null ? doctor.getFullName() : "N/A");
+    }
+
+    @Override
     public Map<String, String> toKeyValueMap() {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("ID", String.valueOf(id));
         map.put("Date", DateUtils.formatDate(date));
-        map.put("Hour", String.valueOf(hour));
+        map.put("Time", String.format("%02d:00", hour));
         map.put("Patient", patient != null ? patient.getFullName() : "N/A");
         map.put("Doctor", doctor != null ? doctor.getFullName() : "N/A");
         map.put("Notes", notes);
-        map.put("Completed", completed ? "Yes" : "No");
+        map.put("Status", completed ? "Completed" : "Pending");
         return map;
     }
 }

@@ -7,7 +7,6 @@ import utils.DateUtils;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class PatientView {
     public void show() {
@@ -45,11 +44,7 @@ public class PatientView {
             return;
         }
 
-        List<Map<String, String>> patientsData = patients.stream()
-                .map(Patient::toKeyValueMap)
-                .toList();
-
-        ConsoleUtils.printModelList(patientsData);
+        ConsoleUtils.printModelList(patients);
 
         int patientIndex = ConsoleUtils.readInt("\nEnter patient number to view details (0 to go back): ", 0,
                 patients.size()) - 1;
@@ -73,12 +68,7 @@ public class PatientView {
             ConsoleUtils.waitForEnter();
             return;
         }
-
-        List<Map<String, String>> patientsData = patients.stream()
-                .map(Patient::toKeyValueMap)
-                .toList();
-
-        ConsoleUtils.printModelList(patientsData);
+        ConsoleUtils.printModelList(patients);
 
         int patientIndex = ConsoleUtils.readInt("\nEnter patient number to view details (0 to go back): ", 0,
                 patients.size()) - 1;

@@ -63,9 +63,14 @@ public class Clinic extends SerializableModel {
         return null;
     }
 
+    @Override
+    public String toViewListString() {
+        return String.format("%s - %s", name, specialty);
+    }
+
+    @Override
     public Map<String, String> toKeyValueMap() {
         Map<String, String> map = new LinkedHashMap<>();
-        // map.put("ID", String.valueOf(id));
         map.put("Name", name);
         map.put("Address", address);
         map.put("Specialty", specialty);

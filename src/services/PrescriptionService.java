@@ -49,11 +49,6 @@ public class PrescriptionService {
 
         Prescription prescription = new Prescription(null, medication, description, doctor, patient);
 
-        if (patient.medicalRecord != null) {
-            patient.medicalRecord.prescriptions.add(prescription);
-            MedicalRecordService.save(patient.medicalRecord);
-        }
-
         return save(prescription);
     }
 

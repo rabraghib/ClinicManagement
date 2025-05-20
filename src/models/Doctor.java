@@ -50,6 +50,11 @@ public class Doctor extends User {
     }
 
     @Override
+    public String toViewListString() {
+        return String.format("%s - %s", super.toViewListString(), specialty);
+    }
+
+    @Override
     public Map<String, String> toKeyValueMap() {
         Map<String, String> map = super.toKeyValueMap();
         map.put("Specialty", specialty);

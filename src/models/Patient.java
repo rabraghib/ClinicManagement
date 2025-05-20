@@ -3,10 +3,11 @@ package models;
 import utils.DateUtils;
 import utils.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
+
+import services.MedicalRecordService;
+
 import java.util.LinkedHashMap;
 
 public class Patient extends SerializableModel {
@@ -17,10 +18,9 @@ public class Patient extends SerializableModel {
     public Date dateOfBirth;
     public String gender;
     public MedicalRecord medicalRecord;
-    public List<Appointment> appointments;
+    // public List<Appointment> appointments;
 
     public Patient() {
-        this.appointments = new ArrayList<>();
     }
 
     public Patient(Long id, String firstName, String lastName, Date dateOfBirth, String gender, String email,
@@ -32,7 +32,6 @@ public class Patient extends SerializableModel {
         this.gender = gender;
         this.email = email;
         this.phone = phone;
-        this.appointments = new ArrayList<>();
         this.medicalRecord = new MedicalRecord(this);
     }
 
@@ -63,14 +62,18 @@ public class Patient extends SerializableModel {
             patient.gender = parts[4];
             patient.email = parts[5];
             patient.phone = parts[6];
-            // TODOO
-            // patient.appointments = appointments.Service;
-            patient.medicalRecord = new MedicalRecord(patient);
+            patient.medicalRecord = MedicalRecordService.getByPatientId(patient.id);
             return patient;
         }
         return null;
     }
 
+    @Override
+    public String toViewListString() {
+        return String.format("%s (%s)", getFullName(), email);
+    }
+
+    @Override
     public Map<String, String> toKeyValueMap() {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("ID", String.valueOf(id));

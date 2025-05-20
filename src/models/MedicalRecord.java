@@ -2,17 +2,14 @@ package models;
 
 import services.PatientService;
 import utils.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class MedicalRecord extends SerializableModel {
 
     private Patient patient;
     public String history;
-    public List<Prescription> prescriptions;
+    // public List<Prescription> prescriptions;
 
     public Patient getPatient() {
         return patient;
@@ -25,14 +22,12 @@ public class MedicalRecord extends SerializableModel {
 
     public MedicalRecord() {
         this.history = "";
-        this.prescriptions = new ArrayList<>();
     }
 
     public MedicalRecord(Patient patient) {
         this.history = "";
         this.setPatient(patient);
         this.history = "";
-        this.prescriptions = new ArrayList<>();
     }
 
     public void updateHistory(String newEntry) {
@@ -58,19 +53,22 @@ public class MedicalRecord extends SerializableModel {
             record.id = Long.parseLong(parts[0]);
             record.patient = PatientService.getById(Long.parseLong(parts[1]));
             record.history = parts[2];
-            // TODO:
-            // record.prescriptions = PrescriptionService.
             return record;
         }
         return null;
     }
 
+    @Override
+    public String toViewListString() {
+        return String.format("Record for %s", patient != null ? patient.getFullName() : "N/A");
+    }
+
+    @Override
     public Map<String, String> toKeyValueMap() {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("ID", String.valueOf(id));
         map.put("Patient", patient != null ? patient.getFullName() : "N/A");
         map.put("History", history);
-        map.put("Number of Prescriptions", String.valueOf(prescriptions != null ? prescriptions.size() : 0));
         return map;
     }
 }

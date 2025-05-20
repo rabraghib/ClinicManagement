@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import models.SerializableModel;
+
 public class ConsoleUtils {
     static final int defaultLength = 50;
     private static final Scanner scanner = new Scanner(System.in);
@@ -36,7 +38,7 @@ public class ConsoleUtils {
 
     public static boolean readBool(String prompt) {
         while (true) {
-            System.out.print(prompt);
+            System.out.print(prompt + " (y/n) ");
             String input = scanner.nextLine().trim().toLowerCase();
             if (input.equals("y") || input.equals("yes")) {
                 return true;
@@ -87,47 +89,19 @@ public class ConsoleUtils {
         });
     }
 
-    public static void printModelList(List<Map<String, String>> models) {
+    public static void printModelList(List<? extends SerializableModel> models) {
         if (models == null || models.isEmpty()) {
             System.out.println("No data available");
             return;
         }
-
-        var allKeys = models.stream()
-                .flatMap(map -> map.keySet().stream())
-                .distinct()
-                .toList();
-
-        int[] columnWidths = new int[allKeys.size()];
-        for (int i = 0; i < allKeys.size(); i++) {
-            String key = allKeys.get(i);
-            int maxWidth = Math.max(
-                    key.length(),
-                    models.stream()
-                            .map(map -> map.getOrDefault(key, ""))
-                            .mapToInt(String::length)
-                            .max()
-                            .orElse(0));
-            columnWidths[i] = maxWidth;
+        var allValues = models.stream().map(m -> m.toViewListString()).toList();
+        System.out.println();
+        int maxIndexLength = String.valueOf(models.size()).length();
+        for (int i = 0; i < models.size(); i++) {
+            String index = String.valueOf(i + 1);
+            String paddedIndex = index + ".";
+            System.out.printf("%-" + (maxIndexLength + 2) + "s %s\n", paddedIndex, allValues.get(i));
         }
-
-        StringBuilder header = new StringBuilder();
-        for (int i = 0; i < allKeys.size(); i++) {
-            header.append(String.format("%-" + (columnWidths[i] + 2) + "s", allKeys.get(i)));
-        }
-        System.out.println(header);
-        printSeparator(header.length());
-
-        for (var model : models) {
-            StringBuilder row = new StringBuilder();
-            for (int i = 0; i < allKeys.size(); i++) {
-                String key = allKeys.get(i);
-                String value = model.getOrDefault(key, "");
-                row.append(String.format("%-" + (columnWidths[i] + 2) + "s", value));
-            }
-            System.out.println(row);
-        }
-
-        printSeparator(header.length());
+        System.out.println();
     }
 }

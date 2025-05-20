@@ -24,7 +24,6 @@ public class UserService {
     public static User login(String username, String password) {
         List<User> users = getAll();
         for (User user : users) {
-            System.out.println("Username=" + user.username + " Password=" + user.password);
             if (user.username.equals(username) && user.password.equals(password)) {
                 return user;
             }

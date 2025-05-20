@@ -4,7 +4,6 @@ import services.PatientService;
 import services.UserService;
 import utils.DateUtils;
 import utils.StringUtils;
-
 import java.util.Map;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -54,10 +53,19 @@ public class Prescription extends SerializableModel {
         return null;
     }
 
+    @Override
+    public String toViewListString() {
+        return String.format("%s - %s for %s",
+                DateUtils.formatDate(creationDate),
+                medication,
+                patient != null ? patient.getFullName() : "N/A");
+    }
+
+    @Override
     public Map<String, String> toKeyValueMap() {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("ID", String.valueOf(id));
-        map.put("Creation Date", DateUtils.formatDate(creationDate));
+        map.put("Date", DateUtils.formatDate(creationDate));
         map.put("Medication", medication);
         map.put("Description", description);
         map.put("Doctor", doctor != null ? doctor.getFullName() : "N/A");

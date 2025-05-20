@@ -10,7 +10,6 @@ import utils.DateUtils;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class PatientDetailsView {
     private final Patient patient;
@@ -32,10 +31,7 @@ public class PatientDetailsView {
             if (prescriptions.isEmpty()) {
                 System.out.println("No medical records found.");
             } else {
-                List<Map<String, String>> prescriptionsData = prescriptions.stream()
-                        .map(Prescription::toKeyValueMap)
-                        .toList();
-                ConsoleUtils.printModelList(prescriptionsData);
+                ConsoleUtils.printModelList(prescriptions);
             }
 
             System.out.println("\nPlease select an option:");
@@ -130,8 +126,7 @@ public class PatientDetailsView {
         if (!gender.isEmpty())
             patient.gender = gender;
 
-        PatientService.update(patient.id, patient.firstName, patient.lastName, patient.dateOfBirth, patient.gender,
-                patient.email, patient.phone);
+        PatientService.save(patient);
 
         System.out.println("\nPatient updated successfully!");
         ConsoleUtils.waitForEnter();
@@ -141,9 +136,8 @@ public class PatientDetailsView {
         ConsoleUtils.clearScreen();
         ConsoleUtils.printTitle("Remove Patient");
 
-        System.out.println("Are you sure you want to remove this patient? (y/n)");
-        String confirm = ConsoleUtils.readLine().toLowerCase();
-        if (!confirm.equals("y")) {
+        boolean confirm = ConsoleUtils.readBool("Are you sure you want to remove this patient?");
+        if (!confirm) {
             return false;
         }
 

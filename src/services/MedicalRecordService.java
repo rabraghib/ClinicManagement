@@ -2,7 +2,6 @@ package services;
 
 import models.MedicalRecord;
 import models.Patient;
-import models.Prescription;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -48,16 +47,6 @@ public class MedicalRecordService {
         }
 
         record.updateHistory(newEntry);
-        return save(record);
-    }
-
-    public static MedicalRecord addPrescription(Long recordId, Prescription prescription) {
-        MedicalRecord record = getById(recordId);
-        if (record == null) {
-            return null;
-        }
-
-        record.prescriptions.add(prescription);
         return save(record);
     }
 

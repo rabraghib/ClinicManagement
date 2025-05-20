@@ -11,7 +11,6 @@ import utils.DateUtils;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class AppointmentView {
     public void show() {
@@ -108,12 +107,7 @@ public class AppointmentView {
     }
 
     private void showAppointmentsList(List<Appointment> appointments) {
-        List<Map<String, String>> appointmentsData = appointments.stream()
-                .map(Appointment::toKeyValueMap)
-                .toList();
-
-        ConsoleUtils.printModelList(appointmentsData);
-
+        ConsoleUtils.printModelList(appointments);
         int appointmentIndex = ConsoleUtils.readInt("\nEnter appointment number to view details (0 to go back): ", 0,
                 appointments.size()) - 1;
         if (appointmentIndex == -1)
@@ -134,11 +128,7 @@ public class AppointmentView {
             return;
         }
 
-        List<Map<String, String>> doctorsData = doctors.stream()
-                .map(Doctor::toKeyValueMap)
-                .toList();
-
-        ConsoleUtils.printModelList(doctorsData);
+        ConsoleUtils.printModelList(doctors);
 
         int doctorIndex = ConsoleUtils.readInt("\nSelect doctor (0 to cancel): ", 0, doctors.size()) - 1;
         if (doctorIndex == -1)

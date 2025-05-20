@@ -8,7 +8,6 @@ import services.UserService;
 import utils.ConsoleUtils;
 
 import java.util.List;
-import java.util.Map;
 
 public class ClinicView {
 
@@ -82,16 +81,10 @@ public class ClinicView {
             List<Assistant> assistants = clinic.assistants;
 
             System.out.println("\nDoctors:");
-            List<Map<String, String>> doctorsData = doctors.stream()
-                    .map(Doctor::toKeyValueMap)
-                    .toList();
-            ConsoleUtils.printModelList(doctorsData);
+            ConsoleUtils.printModelList(doctors);
 
             System.out.println("\nAssistants:");
-            List<Map<String, String>> assistantsData = assistants.stream()
-                    .map(Assistant::toKeyValueMap)
-                    .toList();
-            ConsoleUtils.printModelList(assistantsData);
+            ConsoleUtils.printModelList(assistants);
 
             System.out.println("\nPlease select an option:");
             System.out.println("1. Add");
@@ -160,16 +153,10 @@ public class ClinicView {
         List<Assistant> assistants = clinic.assistants;
 
         System.out.println("\nDoctors:");
-        List<Map<String, String>> doctorsData = doctors.stream()
-                .map(Doctor::toKeyValueMap)
-                .toList();
-        ConsoleUtils.printModelList(doctorsData);
+        ConsoleUtils.printModelList(doctors);
 
         System.out.println("\nAssistants:");
-        List<Map<String, String>> assistantsData = assistants.stream()
-                .map(Assistant::toKeyValueMap)
-                .toList();
-        ConsoleUtils.printModelList(assistantsData);
+        ConsoleUtils.printModelList(assistants);
 
         int totalEmployees = doctors.size() + assistants.size();
         if (totalEmployees == 0) {
@@ -178,7 +165,8 @@ public class ClinicView {
             return;
         }
 
-        int employeeIndex = ConsoleUtils.readInt("\nEnter employee number to view details (0 to go back): ", 0, totalEmployees) - 1;
+        int employeeIndex = ConsoleUtils.readInt("\nEnter employee number to view details (0 to go back): ", 0,
+                totalEmployees) - 1;
         if (employeeIndex == -1)
             return;
 
